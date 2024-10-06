@@ -1,0 +1,61 @@
+{
+    "$schema": "https://raw.githubusercontent.com/cezarypiatek/ScriptRunnerPOC/main/schema/v1/ScriptRunnerSchema.json",
+    "actions": [
+        {
+            "name": "Run SQL Server Docker Container",
+            "description": "Run a Docker container with Microsoft SQL Server",
+            "command": "docker run -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD={MSSQL_SA_PASSWORD} -e MSSQL_PID={MSSQL_PID} -p {HOST_PORT}:1433 --name {CONTAINER_NAME} mcr.microsoft.com/mssql/server:latest",
+            "installCommand": "docker pull mcr.microsoft.com/mssql/server:latest",
+            "categories": ["Docker", "SQL Server"],
+            "params": [
+                {
+                    "name": "MSSQL_PID",
+                    "prompt": "dropdown",
+                    "description": "Product Edition",
+                    "default": "Developer",
+                    "promptSettings": {
+                        "options": "Developer,Express,Standard,Enterprise"
+                    }
+                },
+                {
+                    "name": "HOST_PORT",
+                    "prompt": "numeric",
+                    "description": "Server port",
+                    "default": "1433"
+                },
+                {
+                    "name": "MSSQL_SA_PASSWORD",
+                    "prompt": "password",
+                    "description": "Password for the SA"
+                },
+                {
+                    "name": "CONTAINER_NAME",
+                    "prompt": "text",
+                    "description": "Name for the container",
+                    "default": "sqlserver"
+                }
+            ]
+        },
+        {
+            "name": "DotnetInfo",
+            "description": "Show info about dotnet",
+            "command": "dotnet --info"
+        },
+        {
+            "name": "Process using port",
+            "autoParameterBuilderStyle": "powershell",
+            "command": "pwsh -NoProfile -Command ./ProcessUsingPort.ps1",
+            "params": [
+                {
+                    "name": "Port",
+                    "prompt": "numeric"
+                },
+                {
+                    "name": "Kill",
+                    "prompt": "checkbox"
+                }
+            ]
+
+        }
+    ]
+}
