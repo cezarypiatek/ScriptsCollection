@@ -56,6 +56,29 @@
                 }
             ]
 
+        },
+        {
+            "name": "Run DotnetAspire Dashboard",
+            "autoParameterBuilderStyle": "powershell",
+            "command": "pwsh -NoProfile -Command ./RunAspireDashboard.ps1",
+            "params": [
+                {
+                    "name": "Distribution",
+                    "prompt": "dropdown",
+                    "default": "Stable",
+                    "promptSettings": {
+                        "options": "Stable,Nightly"
+                    }
+                },
+                {
+                    "name": "PullLatest",
+                    "prompt": "checkbox"
+                }
+            ]
+        },
+        {
+            "name": "Get npm packages for update",
+            "command": "npm outdated"
         }
     ]
 }
