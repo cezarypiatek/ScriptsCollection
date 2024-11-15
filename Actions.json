@@ -73,6 +73,18 @@
                 {
                     "name": "PullLatest",
                     "prompt": "checkbox"
+                },
+                {
+                    "name": "WebPort",
+                    "description": "Web Port",
+                    "prompt": "numeric",
+                    "default": "18888"
+                },
+                {
+                    "name": "OtLPort",
+                    "description": "OTL Port",
+                    "prompt": "numeric",
+                    "default": "4317"
                 }
             ]
         },
