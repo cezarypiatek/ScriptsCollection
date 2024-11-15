@@ -3,13 +3,16 @@ param(
     [switch]$Kill
 )
 
-$processId = Get-NetTCPConnection -LocalPort $Port
-if(-not ($processId -eq $null))
+$results = Get-NetTCPConnection -LocalPort $Port | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object {Get-Process -Id $_}
+
+if(-not ($null -eq $results))
 {
-    $process = Get-Process -Id ($processId)
-    $process
-    if($Kill)
-    {
-        $process.OwningProcess | Stop-Process
+    $results | Format-Table -Property Id, Name, Path -AutoSize
+    $results | ForEach-Object {
+        
+        if($Kill)
+        {
+            $_ | Stop-Process
+        }
     }
 }
