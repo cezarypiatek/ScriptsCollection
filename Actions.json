@@ -91,6 +91,36 @@
         {
             "name": "Get npm packages for update",
             "command": "npm outdated"
-        }
+        },
+        {
+            "name": "Get container logs",
+            "categories": ["Docker"],
+            "command": "docker logs -f {Container}",
+            "params": [
+                {
+                    "name": "Container",
+                    "prompt": "dropdown",
+                    "promptSettings": {
+                        "searchable": true,
+                        "optionsGeneratorCommand": "docker ps --format \"{{.Names}}\""
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Run docker container",
+            "categories": ["Docker"],
+            "command": "docker run --rm {Image}",
+            "params": [
+                {
+                    "name": "Image",
+                    "prompt": "dropdown",
+                    "promptSettings": {
+                        "searchable": true,
+                        "optionsGeneratorCommand": "docker image ls --format \"{{.Repository}}\""
+                    }
+                }
+            ]
+        },
     ]
 }
