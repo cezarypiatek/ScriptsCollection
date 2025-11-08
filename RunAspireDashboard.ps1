@@ -1,11 +1,11 @@
-param($Distribution, $PullLatest, $WebPort = 18888, $OtLPort = 4317)
+param($Distribution, $PullLatest, $WebPort = 18888, $OtLPort = 4317, $Tag="latest")
 
 $image = if($Distribution -eq "Nightly")
 {
-    "mcr.microsoft.com/dotnet/nightly/aspire-dashboard"
+    "mcr.microsoft.com/dotnet/nightly/aspire-dashboard:$Tag"
 }
 else{
-   "mcr.microsoft.com/dotnet/aspire-dashboard"
+   "mcr.microsoft.com/dotnet/aspire-dashboard:$Tag"
 }
 
 if($PullLatest)

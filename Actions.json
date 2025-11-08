@@ -4,9 +4,9 @@
         {
             "name": "Run SQL Server Docker Container",
             "description": "Run a Docker container with Microsoft SQL Server",
-            "command": "docker run -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD={MSSQL_SA_PASSWORD} -e MSSQL_PID={MSSQL_PID} -p {HOST_PORT}:1433 --name {CONTAINER_NAME} mcr.microsoft.com/mssql/server:latest",
+            "command": "docker run -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD={MSSQL_SA_PASSWORD} -e MSSQL_PID={MSSQL_PID} -p {HOST_PORT}:1433 -v {DATA_DIR}:/var/opt/mssql/data --name {CONTAINER_NAME} mcr.microsoft.com/mssql/server:latest",
             "installCommand": "docker pull mcr.microsoft.com/mssql/server:latest",
-            "categories": ["Docker", "SQL Server"],
+            "categories": ["docker", "SQL Server"],
             "params": [
                 {
                     "name": "MSSQL_PID",
@@ -33,16 +33,51 @@
                     "prompt": "text",
                     "description": "Name for the container",
                     "default": "sqlserver"
+                },
+                {
+                    "name": "DATA_DIR",
+                    "description": "Data directory",
+                    "prompt": "directoryPicker"
+                }
+            ]
+        },
+        {
+            "name": "RunAzurite",
+            "description": "Run a Docker container with Azurite (Azure Storage Emulator)",
+            "command": "docker run --rm -p {BlobPort}:10000 -p {QueuePort}:10001 -p {TablePort}:10002 mcr.microsoft.com/azure-storage/azurite",
+            "installCommand": "docker pull mcr.microsoft.com/azure-storage/azurite",
+            "categories": ["docker", "Azure"],
+            "params": [
+                {
+                    "name": "BlobPort",
+                    "prompt": "numeric",
+                    "description": "Blob service port",
+                    "default": "10000"
+                },
+                {
+                    "name": "QueuePort",
+                    "prompt": "numeric",
+                    "description": "Queue service port",
+                    "default": "10001"
+                },
+                {
+                    "name": "TablePort",
+                    "prompt": "numeric",
+                    "description": "Table service port",
+                    "default": "10002"
                 }
             ]
         },
         {
             "name": "DotnetInfo",
-            "description": "Show info about dotnet",
+            "description": "Show details about installed dotnet",
+            "categories": ["dotnet"],
             "command": "dotnet --info"
         },
         {
             "name": "Process using port",
+            "description": "Get the process using a specific port, with an option to kill it",
+            "categories": ["system"],
             "autoParameterBuilderStyle": "powershell",
             "command": "pwsh -NoProfile -Command ./ProcessUsingPort.ps1",
             "params": [
@@ -55,12 +90,24 @@
                     "prompt": "checkbox"
                 }
             ]
-
+        },
+        {
+            "name": "Get process",
+            "description": "Get all processes matching a name pattern",
+            "command": "pwsh -Command Get-Process '*{Name}*'",
+            "categories": ["system"],
+            "params": [
+                {
+                    "name": "Name",
+                    "prompt": "text"
+                }
+            ]
         },
         {
             "name": "Run DotnetAspire Dashboard",
-            "autoParameterBuilderStyle": "powershell",
             "command": "pwsh -NoProfile -Command ./RunAspireDashboard.ps1",
+            "autoParameterBuilderStyle": "powershell",
+            "categories": ["docker","aspire"],
             "params": [
                 {
                     "name": "Distribution",
@@ -69,6 +116,11 @@
                     "promptSettings": {
                         "options": "Stable,Nightly"
                     }
+                },
+                {
+                    "name": "Tag",
+                    "prompt": "text",
+                    "default": "9.5"
                 },
                 {
                     "name": "PullLatest",
@@ -89,13 +141,9 @@
             ]
         },
         {
-            "name": "Get npm packages for update",
-            "command": "npm outdated"
-        },
-        {
             "name": "Get container logs",
-            "categories": ["Docker"],
             "command": "docker logs -f {Container}",
+            "categories": ["docker"],
             "params": [
                 {
                     "name": "Container",
@@ -108,19 +156,42 @@
             ]
         },
         {
-            "name": "Run docker container",
-            "categories": ["Docker"],
-            "command": "docker run --rm {Image}",
+            "name": "CleanUpBuildArtifacts",
+            "description": "Cleans up build artifacts from specified directories",
+            "command": "pwsh -NoProfile -Command ./CleanBuildFiles.ps1",
+            "autoParameterBuilderStyle": "powershell",
+            "docs": "CleanBuildFiles.md",
+            "categories": ["system","cleanup"],
             "params": [
                 {
-                    "name": "Image",
-                    "prompt": "dropdown",
-                    "promptSettings": {
-                        "searchable": true,
-                        "optionsGeneratorCommand": "docker image ls --format \"{{.Repository}}\""
-                    }
+                    "name": "Path",
+                    "prompt": "directoryPicker",
+                    "description": "Directory to clean"
+                }
+            ],
+            "interactiveInputs": [
+                {
+                    "whenMatched": "Delete this directory?",
+                    "inputs": [
+                        {
+                            "label": "Yes",
+                            "value": "Y"
+                        },
+                        {
+                            "label": "Yes to All",
+                            "value": "A"
+                        },
+                        {
+                            "label": "Skip",
+                            "value": "S"
+                        },
+                        {
+                            "label": "Abort",
+                            "value": "X"
+                        }
+                    ]
                 }
             ]
-        },
+        }
     ]
 }
