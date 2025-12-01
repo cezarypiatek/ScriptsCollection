@@ -1,0 +1,26 @@
+{
+    "serverInfo": {
+        "name": "posh-mcp",
+        "version": "1.0.0"
+    },
+    "modules": [
+        {
+            "name": "Outlook",
+            "path": "./Outlook.psm1",
+            "cmdlets": [
+                "Get-OutlookEmails"
+            ]
+        }
+    ],
+    "scripts": [
+        {
+            "path": "./tools.ps1",
+            "cmdlets": [
+                "Get-DateInfo",
+                "Add-Numbers",
+                "Get-RunningServices",
+                "Get-RunningProcesses"
+            ]
+        }
+    ]
+}
