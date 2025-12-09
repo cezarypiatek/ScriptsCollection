@@ -192,6 +192,28 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "Save Secret to powershell store",
+            "description": "Saves a secret to the PowerShell Secret Management store to make it available for other scripts run on this machine",
+            "categories": ["secrets","powershell"],
+            "command": "pwsh -NoProfile -Command Set-Secret",
+            "installCommand": "pwsh -NoProfile -Command ./SecretsManagement/install.ps1",
+            "autoParameterBuilderStyle": "powershell",
+            "docs": "./SecretsManagement/docs.md",
+            "params": [
+                {
+                    "name": "Name",
+                    "prompt": "text",
+                    "description": "Secret",
+                    "default": "MyApiToken"
+                },
+                {
+                    "name": "Secret",
+                    "description": "Secret",
+                    "prompt": "password"
+                }
+            ]
         }
     ]
 }
